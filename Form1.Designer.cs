@@ -34,6 +34,8 @@
             this.label_CurrentPath = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button_ChangeAttributes = new System.Windows.Forms.Button();
+            this.button_Compress = new System.Windows.Forms.Button();
+            this.button_Refresh = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBox_Browser
@@ -102,11 +104,33 @@
             this.button_ChangeAttributes.UseVisualStyleBackColor = true;
             this.button_ChangeAttributes.Click += new System.EventHandler(this.Button_ChangeAttributes_Click);
             // 
+            // button_Compress
+            // 
+            this.button_Compress.Location = new System.Drawing.Point(201, 6);
+            this.button_Compress.Name = "button_Compress";
+            this.button_Compress.Size = new System.Drawing.Size(107, 35);
+            this.button_Compress.TabIndex = 6;
+            this.button_Compress.Text = "Un/Compress";
+            this.button_Compress.UseVisualStyleBackColor = true;
+            this.button_Compress.Click += new System.EventHandler(this.Button_Compress_Click);
+            // 
+            // button_Refresh
+            // 
+            this.button_Refresh.Location = new System.Drawing.Point(500, 6);
+            this.button_Refresh.Name = "button_Refresh";
+            this.button_Refresh.Size = new System.Drawing.Size(70, 35);
+            this.button_Refresh.TabIndex = 7;
+            this.button_Refresh.Text = "Refresh";
+            this.button_Refresh.UseVisualStyleBackColor = true;
+            this.button_Refresh.Click += new System.EventHandler(this.Button_Refresh_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(582, 748);
+            this.Controls.Add(this.button_Refresh);
+            this.Controls.Add(this.button_Compress);
             this.Controls.Add(this.button_ChangeAttributes);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label_CurrentPath);
@@ -131,6 +155,8 @@
         private System.Windows.Forms.Label label_CurrentPath;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button_ChangeAttributes;
+        private System.Windows.Forms.Button button_Compress;
+        private System.Windows.Forms.Button button_Refresh;
     }
 }
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.IO;
+using System.IO.Compression;
+using System.Text.RegularExpressions;
 
 namespace SanityArchiver_List
 {
@@ -23,6 +25,7 @@ namespace SanityArchiver_List
             comboBox_Drives.Text = @"Y:\";
             PopulateListBox(currentPath);
         }
+
         private void PopulateListBox(String path)
         {
             try
@@ -69,9 +72,20 @@ namespace SanityArchiver_List
             if (listBox_Browser.SelectedItems.Count != 0 && listBox_Browser.SelectedItems[0].ToString().StartsWith("["))
             {
                 String currentDir = listBox_Browser.SelectedItems[0].ToString().Remove(0, 1);
-                currentDir = currentDir.Remove(currentDir.Length-1, 1);
+                currentDir = currentDir.Remove(currentDir.Length - 1, 1);
                 currentPath = currentPath + @"\" + currentDir;
                 PopulateListBox(currentPath);
+            }
+            if (listBox_Browser.SelectedItems.Count != 0 && !listBox_Browser.SelectedItems[0].ToString().StartsWith("["))
+            {
+                try
+                {
+                    System.Diagnostics.Process.Start(currentPath + @"\" + listBox_Browser.SelectedItem.ToString());
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -104,10 +118,102 @@ namespace SanityArchiver_List
             }
         }
 
-        private static bool IsDirectory(string path)
+        private void Button_Refresh_Click(object sender, EventArgs e)
+        {
+            PopulateListBox(currentPath);
+        }
+
+        private void Button_Compress_Click(object sender, EventArgs e)
+        {
+            if (listBox_Browser.SelectedItems.Count != 0 && !listBox_Browser.SelectedItems[0].ToString().StartsWith("["))
+            {
+                FileInfo fileSelected = new FileInfo(listBox_Browser.SelectedItem.ToString());
+                if (fileSelected.Extension != ".gzip")
+                {
+                    CompressFile(currentPath, listBox_Browser.SelectedItem.ToString());
+                }
+                else
+                {
+                    UnCompress(currentPath, listBox_Browser.SelectedItem.ToString());
+                }
+            }
+        }
+
+        public void CompressFile(string location, string filename)
+        {
+            string filePathAndFilename = location + @"\" + filename;
+            string gzipPathAndFilename = location + @"\" + filename + ".gzip";
+
+            using (FileStream inputStream = new FileStream(filePathAndFilename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                using (FileStream outputStream = new FileStream(gzipPathAndFilename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                {
+                    using (GZipStream gzip = new GZipStream(outputStream, CompressionMode.Compress))
+                    {
+                        inputStream.CopyTo(gzip);
+                    }
+                }
+            }
+            PopulateListBox(currentPath);
+        }
+
+        public void UnCompress(string location, string filename)
+        {
+            FileInfo fileSelected = new FileInfo(filename);
+            FileInfo fileSelectedTo = new FileInfo(filename.Remove(filename.Length - fileSelected.Extension.Length));
+            string filePathAndFilename = location + @"\" + fileSelectedTo.Name;
+            string gzipPathAndFilename = location + @"\" + filename;
+
+            using (FileStream inputStream = new FileStream(gzipPathAndFilename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                using (FileStream outputStream = new FileStream(filePathAndFilename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                {
+                    using (GZipStream gzip = new GZipStream(inputStream, CompressionMode.Decompress))
+                    {
+                        gzip.CopyTo(outputStream);
+                    }
+                }
+            }
+            PopulateListBox(currentPath);
+        }
+
+
+
+
+
+
+
+        public static bool IsDirectory(string path)
         {
             System.IO.FileAttributes fa = System.IO.File.GetAttributes(path);
             return (fa & FileAttributes.Directory) != 0;
+        }
+
+        public void CompressADirectory(DirectoryInfo directoryPath)
+        {
+            foreach (DirectoryInfo directory in directoryPath.GetDirectories())
+            {
+                var path = directoryPath.FullName;
+                var newArchiveName = Regex.Replace(directory.Name, "[0-9]{8}", "20130913");
+                newArchiveName = Regex.Replace(newArchiveName, "[_]+", "_");
+                string startPath = path + directory.Name;
+                string zipPath = path + "" + newArchiveName + ".zip";
+
+                ZipFile.CreateFromDirectory(startPath, zipPath);
+            }
+
+        }
+
+        public void DecompressADirectory(DirectoryInfo directoryPath)
+        {
+            foreach (FileInfo file in directoryPath.GetFiles())
+            {
+                var path = directoryPath.FullName;
+                string zipPath = path + file.Name;
+                string extractPath = Regex.Replace(path + file.Name, ".zip", "");
+
+                ZipFile.ExtractToDirectory(zipPath, extractPath);
+            }
         }
     }
 }

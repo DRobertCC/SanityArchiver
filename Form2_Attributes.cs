@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SanityArchiver_List
@@ -131,18 +125,6 @@ namespace SanityArchiver_List
             return fileAttributes & ~toRemove;
         }
 
-        private void Button_Cancel_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void Button_Ok_Click(object sender, EventArgs e)
-        {
-            ApplyAttributes();
-            this.Close();
-
-        }
-
         private void ApplyAttributes()
         {
             List<string> checkedList = new List<string>();
@@ -154,6 +136,18 @@ namespace SanityArchiver_List
                 }
             }
             SetAttributes(checkedList);
+        }
+
+        private void Button_Cancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Button_Ok_Click(object sender, EventArgs e)
+        {
+            ApplyAttributes();
+            this.Close();
+
         }
 
         private void Button_Apply_Click(object sender, EventArgs e)
