@@ -122,8 +122,15 @@ namespace SanityArchiver_List
         {
             if (listBox_Browser.SelectedItems.Count == 1 && !listBox_Browser.SelectedItem.ToString().StartsWith("["))
             {
-                DeleteFile(currentPath, listBox_Browser.SelectedItem.ToString());
-                PopulateListBox(currentPath);
+                try
+                {
+                    DeleteFile(currentPath, listBox_Browser.SelectedItem.ToString());
+                    PopulateListBox(currentPath);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -148,13 +155,27 @@ namespace SanityArchiver_List
                 FileInfo fileSelected = new FileInfo(listBox_Browser.SelectedItem.ToString());
                 if (fileSelected.Extension != ".gzip")
                 {
-                    CompressFile(currentPath, listBox_Browser.SelectedItem.ToString());
-                    PopulateListBox(currentPath);
+                    try
+                    {
+                        CompressFile(currentPath, listBox_Browser.SelectedItem.ToString());
+                        PopulateListBox(currentPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {
-                    UnCompress(currentPath, listBox_Browser.SelectedItem.ToString());
-                    PopulateListBox(currentPath);
+                    try
+                    {
+                        UnCompress(currentPath, listBox_Browser.SelectedItem.ToString());
+                        PopulateListBox(currentPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             //if (listBox_Browser.SelectedItems.Count != 0 && listBox_Browser.SelectedItems[0].ToString().StartsWith("["))

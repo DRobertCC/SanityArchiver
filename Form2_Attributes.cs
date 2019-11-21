@@ -145,9 +145,15 @@ namespace SanityArchiver_List
 
         private void Button_Ok_Click(object sender, EventArgs e)
         {
-            ApplyAttributes();
-            this.Close();
-
+            try
+            {
+                ApplyAttributes();
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Button_Apply_Click(object sender, EventArgs e)
