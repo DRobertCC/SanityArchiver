@@ -118,6 +118,24 @@ namespace SanityArchiver_List
             }
         }
 
+        private void Button_Delete_Click(object sender, EventArgs e)
+        {
+            if (listBox_Browser.SelectedItems.Count == 1 && !listBox_Browser.SelectedItem.ToString().StartsWith("["))
+            {
+                DeleteFile(currentPath, listBox_Browser.SelectedItem.ToString());
+                PopulateListBox(currentPath);
+            }
+        }
+
+        private void DeleteFile(string path, string fileName)
+        {
+            string filePath = path + @"\" + fileName;
+                if (File.Exists(filePath) && (MessageBox.Show($"Are you sure you want to delete '{fileName}'", "Delete File", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes))
+                {
+                    File.Delete(filePath);
+                }
+        }
+
         private void Button_Refresh_Click(object sender, EventArgs e)
         {
             PopulateListBox(currentPath);
@@ -131,12 +149,18 @@ namespace SanityArchiver_List
                 if (fileSelected.Extension != ".gzip")
                 {
                     CompressFile(currentPath, listBox_Browser.SelectedItem.ToString());
+                    PopulateListBox(currentPath);
                 }
                 else
                 {
                     UnCompress(currentPath, listBox_Browser.SelectedItem.ToString());
+                    PopulateListBox(currentPath);
                 }
             }
+            //if (listBox_Browser.SelectedItems.Count != 0 && listBox_Browser.SelectedItems[0].ToString().StartsWith("["))
+            //{
+            //    CompressDirectory(listBox_Browser.SelectedItem.ToString());
+            //}
         }
 
         public void CompressFile(string location, string filename)
@@ -154,7 +178,6 @@ namespace SanityArchiver_List
                     }
                 }
             }
-            PopulateListBox(currentPath);
         }
 
         public void UnCompress(string location, string filename)
@@ -174,7 +197,6 @@ namespace SanityArchiver_List
                     }
                 }
             }
-            PopulateListBox(currentPath);
         }
 
 
@@ -189,8 +211,11 @@ namespace SanityArchiver_List
             return (fa & FileAttributes.Directory) != 0;
         }
 
-        public void CompressADirectory(DirectoryInfo directoryPath)
+        public void CompressDirectory(string theDirectoryName)
         {
+            String currentDir = theDirectoryName.Remove(0, 1);
+            currentDir = currentDir.Remove(currentDir.Length - 1, 1);
+            DirectoryInfo directoryPath = new DirectoryInfo(currentPath + @"\" + currentDir);
             foreach (DirectoryInfo directory in directoryPath.GetDirectories())
             {
                 var path = directoryPath.FullName;
@@ -204,8 +229,9 @@ namespace SanityArchiver_List
 
         }
 
-        public void DecompressADirectory(DirectoryInfo directoryPath)
+        public void DecompressDirectory(string theDirectoryPath)
         {
+            DirectoryInfo directoryPath = new DirectoryInfo(theDirectoryPath);
             foreach (FileInfo file in directoryPath.GetFiles())
             {
                 var path = directoryPath.FullName;

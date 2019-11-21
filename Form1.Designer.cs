@@ -36,6 +36,7 @@
             this.button_ChangeAttributes = new System.Windows.Forms.Button();
             this.button_Compress = new System.Windows.Forms.Button();
             this.button_Refresh = new System.Windows.Forms.Button();
+            this.button_Delete = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBox_Browser
@@ -124,11 +125,22 @@
             this.button_Refresh.UseVisualStyleBackColor = true;
             this.button_Refresh.Click += new System.EventHandler(this.Button_Refresh_Click);
             // 
+            // button_Delete
+            // 
+            this.button_Delete.Location = new System.Drawing.Point(314, 6);
+            this.button_Delete.Name = "button_Delete";
+            this.button_Delete.Size = new System.Drawing.Size(75, 35);
+            this.button_Delete.TabIndex = 8;
+            this.button_Delete.Text = "Delete";
+            this.button_Delete.UseVisualStyleBackColor = true;
+            this.button_Delete.Click += new System.EventHandler(this.Button_Delete_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(582, 748);
+            this.Controls.Add(this.button_Delete);
             this.Controls.Add(this.button_Refresh);
             this.Controls.Add(this.button_Compress);
             this.Controls.Add(this.button_ChangeAttributes);
@@ -157,6 +169,7 @@
         private System.Windows.Forms.Button button_ChangeAttributes;
         private System.Windows.Forms.Button button_Compress;
         private System.Windows.Forms.Button button_Refresh;
+        private System.Windows.Forms.Button button_Delete;
     }
 }
 
